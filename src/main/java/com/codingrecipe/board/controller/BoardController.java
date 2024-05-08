@@ -22,7 +22,7 @@ public class BoardController {
         boardService.write(board);
     }
 
-    @GetMapping("/Iist")
+    @GetMapping("/list")
     public List<Board> boardList(
             @RequestParam(value = "page", defaultValue = "0") int page, // 페이지 번호
             @RequestParam(value = "size", defaultValue = "5") int size, // 페이지 크기
@@ -31,28 +31,27 @@ public class BoardController {
             @RequestParam(value = "searchKeyword", required = false) String searchKeyword) { // 검색 키워드 (선택적)
 
         if (searchKeyword == null) { // 검색 키워드가 없는 경우
-
             int offset = page * size; // 오프셋 계산
             return boardService.boardList(offset, size); // 서비스 클래스의 boardList 메서드 호출
         } else { // 검색 키워드가 있는 경우
             int offset = page * size; // 오프셋 계산
             return boardService.boardSearchList(searchKeyword, offset, size); // 서비스 클래스의 boardSearchList 메서드 호출
         }
-
     }
-   @GetMapping("/view/{id}")
+
+    @GetMapping("/view/{id}")
     public Board boardView(@PathVariable Integer id) {
         return boardService.boardView(id);
     }
 
     @DeleteMapping("/delete/{id}")
-    public void boardDelete(Integer id) {
+    public void boardDelete(@PathVariable Integer id) {
         boardService.boardDelete(id);
     }
 
     @PutMapping("/modify/{id}")
     public void boardModify(@PathVariable Integer id, @RequestBody Board board) {
         board.setId(id); // 게시물의 ID 설정
-        boardService.boardModify(board); // 수정된 게시물을 전달
+        boardService.boardModify(board); // 수정된 게시물을 서비스로 전달
     }
 }
