@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.codingrecipe.board.mapper.UserMapper">
+
+    <insert id="registerUser" parameterType="com.codingrecipe.board.entity.User">
+        INSERT INTO user (USER_ID, USER_PW, USER_NAME) VALUES (#{userId}, #{userPw}, #{userName})
+    </insert>
+
+    <select id="findByUserId" resultType="com.codingrecipe.board.entity.User">
+        SELECT * FROM user WHERE USER_ID = #{userId}
+    </select>
+
+</mapper>
