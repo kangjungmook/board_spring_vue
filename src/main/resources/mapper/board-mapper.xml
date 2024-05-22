@@ -3,10 +3,6 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.codingrecipe.board.mapper.BoardMapper">
 
-    <insert id="write" parameterType="com.codingrecipe.board.entity.Board">
-        INSERT INTO board (title, content) VALUES (#{title}, #{content})
-    </insert>
-
     <delete id="delete" parameterType="int">
         DELETE FROM board WHERE id = #{id}
     </delete>
@@ -26,5 +22,9 @@
     <select id="selectById" parameterType="int" resultType="com.codingrecipe.board.entity.Board">
         SELECT * FROM board WHERE id = #{id}
     </select>
+
+    <insert id="write" parameterType="com.codingrecipe.board.entity.Board">
+        INSERT INTO board (title, content, user_id) VALUES (#{title}, #{content}, #{userId})
+    </insert>
 
 </mapper>

@@ -1,6 +1,7 @@
 package com.codingrecipe.board.service;
 
-import com.codingrecipe.board.entity.User;
+import com.codingrecipe.board.Dto.SignUpDto;
+import com.codingrecipe.board.Dto.LoginDto;
 import com.codingrecipe.board.mapper.UserMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -8,16 +9,18 @@ import org.springframework.stereotype.Service;
 @Service
 public class UserService {
 
-    private final UserMapper userMapper;
-
     @Autowired
-    public UserService(UserMapper userMapper) {
-        this.userMapper = userMapper;
+    private UserMapper userMapper;
+
+    public boolean login(LoginDto loginDto) {
+        return userMapper.login(loginDto) > 0;
     }
 
-    public void registerUser(User user) {
-        System.out.println("디비에 저장된 사용자 정보 " + user);
-        userMapper.registerUser(user);
+    public boolean signUp(SignUpDto signUpDto) {
+        // 비밀번호 확인
+        if (!signUpDto.getPassword().equals(signUpDto.getConfirmPassword())) {
+            return false;
+        }
+        return userMapper.signUp(signUpDto) > 0;
     }
-
 }
