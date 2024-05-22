@@ -1,10 +1,15 @@
 package com.codingrecipe.board.mapper;
 
-import com.codingrecipe.board.entity.User;
+
+import com.codingrecipe.board.Dto.SignUpDto;
 import org.apache.ibatis.annotations.Mapper;
+import com.codingrecipe.board.Dto.LoginDto;
 
 @Mapper
 public interface UserMapper {
-    void registerUser(User user);
-    User findByUserId(String userId);
+    int login(LoginDto loginDto);
+
+    int signUp(SignUpDto signUpDto);
 }
+
+
