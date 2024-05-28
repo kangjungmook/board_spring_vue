@@ -2,27 +2,21 @@ package com.codingrecipe.board.Dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
-@AllArgsConstructor(staticName = "set")
-public class ResponseDto<D> {
+@AllArgsConstructor
+@NoArgsConstructor
+public class ResponseDto {
     private boolean result;
     private String message;
-    private D data;
+    private Object data;
 
-    public static <D> ResponseDto<D> setSuccess(String message) {
-        return ResponseDto.set(true, message, null);
+    public static ResponseDto setSuccess(String message) {
+        return new ResponseDto(true, message, null);
     }
 
-    public static <D> ResponseDto<D> setFailed(String message) {
-        return ResponseDto.set(false, message, null);
+    public static ResponseDto setFailed(String message) {
+        return new ResponseDto(false, message, null);
     }
-
-//    public static <D> ResponseDto<D> setSuccessData(String message, D data) {
-//        return ResponseDto.set(true, message, data);
-//    }
-//
-//    public static <D> ResponseDto<D> setFailedData(String message, D data) {
-//        return ResponseDto.set(false, message, data);
-//    }
 }

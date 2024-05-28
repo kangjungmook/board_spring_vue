@@ -1,28 +1,26 @@
 <template>
   <div>
-    <div>
+    <h2>회원가입</h2>
+    <form @submit.prevent="handleSubmit">
       <div>
-        <div>회원가입</div>
-        <div>
-          <form @submit.prevent="registerUser">
-            <div>
-              <label for="username">아이디</label>
-              <input type="text" id="username" v-model="user.userId" required>
-            </div>
-            <div>
-              <label for="password">비밀번호</label>
-              <input type="password" id="password" v-model="user.userPw" required>
-            </div>
-            <div> 
-              <label for="name">이름</label>
-              <input type="text" id="name" v-model="user.userName" required>
-            </div>
-            <button type="submit">가입하기</button>
-          </form>
-          <router-link to="/">목록으로 돌아가기</router-link>
-        </div>
+        <label>이메일:</label>
+        <input type="email" v-model="email" required />
       </div>
-    </div>
+      <div>
+        <label>이름:</label>
+        <input type="text" v-model="name" required />
+      </div>
+      <div>
+        <label>비밀번호:</label>
+        <input type="password" v-model="password" required />
+      </div>
+      <div>
+        <label>비밀번호 확인:</label>
+        <input type="password" v-model="confirmPassword" required />
+      </div>
+      <button type="submit">회원가입</button>
+    </form>
+    <p v-if="message">{{ message }}</p>
   </div>
 </template>
 
@@ -30,37 +28,34 @@
 export default {
   data() {
     return {
-      user: {
-        userId: '',
-        userPw: '',
-        userName: ''
-      }
+      email: '',
+      name: '',
+      password: '',
+      confirmPassword: '',
+      message: ''
     };
   },
   methods: {
-    registerUser() {
-      fetch('/api/board/register', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(this.user)
-      })
-      .then(response => {
-        if (response.ok) {
-          alert('회원가입이 완료되었습니다.');
-        } else {
-          throw new Error('회원가입에 실패했습니다.');
-        }
-      })
-      .catch(error => {
-        console.error(error);
-        alert('회원가입에 실패했습니다.');
-      });
+    async handleSubmit() {
+      try {
+        const response = await fetch('/api/board/signup', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            email: this.email,
+            name: this.name,
+            password: this.password,
+            confirmPassword: this.confirmPassword
+          })
+        });
+        const data = await response.json();
+        this.message = data.message;
+      } catch (error) {
+        this.message = '회원가입 실패';
+      }
     }
   }
 };
 </script>
-
-<style scoped>
-</style>
