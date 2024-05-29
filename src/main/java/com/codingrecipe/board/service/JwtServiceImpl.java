@@ -1,39 +1,51 @@
 package com.codingrecipe.board.service;
 
-import io.jsonwebtoken.JwtBuilder;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
-
-import java.security.Key;
+import io.jsonwebtoken.*;
+import io.jsonwebtoken.security.Keys;
+import org.springframework.stereotype.Service;
+import javax.crypto.SecretKey;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
-import io.jsonwebtoken.security.Keys;
-import org.springframework.stereotype.Service;
 
 @Service
 public class JwtServiceImpl implements JwtService {
-    private Key secretKey = Keys.secretKeyFor(SignatureAlgorithm.HS256);
+    private final SecretKey secretKey = Keys.secretKeyFor(SignatureAlgorithm.HS256);
+    private final long expirationMs = 300000; // 토큰 만료 시간 (5분)
 
     @Override
-    public String getToken(String key, Object value) {
-        Date expTime = new Date();
-        expTime.setTime(expTime.getTime() + 1000 * 60 * 5); // 5분
+    public String getToken(String key, Object value, String name) {
+        Date now = new Date();
+        Date expiration = new Date(now.getTime() + expirationMs);
 
-        Map<String, Object> headerMap = new HashMap<>();
-        headerMap.put("typ", "JWT");
-        headerMap.put("alg", "HS256");
-
-        Map<String, Object> payloadMap = new HashMap<>();
-        payloadMap.put(key, value);
+        Map<String, Object> claims = new HashMap<>();
+        claims.put(key, value);
+        claims.put("name", name);
 
         JwtBuilder builder = Jwts.builder()
-                .setHeader(headerMap)
-                .setClaims(payloadMap)
-                .setExpiration(expTime)
-                .signWith(secretKey, SignatureAlgorithm.HS256);
+                .setClaims(claims)
+                .setExpiration(expiration)
+                .signWith(secretKey);
 
         return builder.compact();
     }
-}
 
+    @Override
+    public String getEmailFromToken(String token) {
+        try {
+            Jws<Claims> claims = Jwts.parserBuilder()
+                    .setSigningKey(secretKey)
+                    .build()
+                    .parseClaimsJws(token);
+
+            // 이메일이 없는 경우 null을 반환하도록 수정
+            return claims.getBody().get("email", String.class);
+        } catch (ExpiredJwtException e) {
+            throw new IllegalArgumentException("만료된 JWT 토큰입니다");
+        } catch (Exception e) {
+            // 이메일이 없는 경우 null을 반환하도록 수정
+            return null;
+        }
+    }
+
+}

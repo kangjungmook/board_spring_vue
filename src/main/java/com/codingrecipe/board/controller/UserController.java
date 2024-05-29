@@ -5,15 +5,14 @@ import com.codingrecipe.board.Dto.ResponseDto;
 import com.codingrecipe.board.Dto.SignUpDto;
 import com.codingrecipe.board.service.UserService;
 import com.codingrecipe.board.service.JwtService;
-import jakarta.servlet.http.Cookie;
-import jakarta.servlet.http.HttpServletResponse;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
-import org.thymeleaf.util.StringUtils;
 
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
-import java.nio.charset.StandardCharsets;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.HashMap;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/board")
@@ -31,32 +30,22 @@ public class UserController {
         if (success) {
             return ResponseDto.setSuccess("회원가입 성공");
         } else {
-            return ResponseDto.setFailed("이미 존재하는 이메일 주소입니다. 다른 이메일을 사용해주세요.");
+            return ResponseDto.setFailed("비밀번호를 다시 확인해주세요");
         }
     }
 
-    @PostMapping("/login") //여기 고쳐야함
-    public void login(@RequestBody LoginDto loginDto, HttpServletResponse response) {
+    @PostMapping("/login")
+    public ResponseEntity<?> login(@RequestBody LoginDto loginDto) {
         boolean success = userService.login(loginDto);
         if (success) {
-            String token = jwtService.getToken("Email", loginDto.getEmail());
-            try {
-                String encodedToken = URLEncoder.encode(token, StandardCharsets.UTF_8.toString());
-                Cookie cookie = new Cookie("Authorization", "Bearer " + encodedToken);
-                cookie.setHttpOnly(true);
-                cookie.setSecure(true);
-                cookie.setPath("/");
-                response.addCookie(cookie);
-                response.setStatus(HttpServletResponse.SC_OK);
-            } catch (UnsupportedEncodingException e) {
-                e.printStackTrace(); // Handle the exception appropriately
-                response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-            }
+            String token = jwtService.getToken("Email", loginDto.getEmail(), loginDto.getName());
+            Map<String, String> response = new HashMap<>();
+            response.put("token", token);
+            return ResponseEntity.ok(response);
         } else {
-            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
         }
     }
-
-
 
 }

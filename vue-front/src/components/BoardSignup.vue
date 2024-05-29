@@ -1,26 +1,36 @@
 <template>
-  <div>
-    <h2>회원가입</h2>
-    <form @submit.prevent="handleSubmit">
-      <div>
-        <label>이메일:</label>
-        <input type="email" v-model="email" required />
+  <div class="container">
+      <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">  
+
+    <div class="row justify-content-center mt-5">
+      <div class="col-md-6">
+        <div class="card">
+          <div class="card-body">
+            <h2 class="card-title text-center">회원가입</h2>
+            <form @submit.prevent="handleSubmit">
+              <div class="form-group">
+                <label for="email">이메일:</label>
+                <input type="email" class="form-control" id="email" v-model="email" required />
+              </div>
+              <div class="form-group">
+                <label for="name">이름:</label>
+                <input type="text" class="form-control" id="name" v-model="name" required />
+              </div>
+              <div class="form-group">
+                <label for="password">비밀번호:</label>
+                <input type="password" class="form-control" id="password" v-model="password" required />
+              </div>
+              <div class="form-group">
+                <label for="confirmPassword">비밀번호 확인:</label>
+                <input type="password" class="form-control" id="confirmPassword" v-model="confirmPassword" required />
+              </div>
+              <button type="submit" class="btn btn-primary btn-block">회원가입</button>
+            </form>
+            <p v-if="message" class="mt-3 text-center">{{ message }}</p>
+          </div>
+        </div>
       </div>
-      <div>
-        <label>이름:</label>
-        <input type="text" v-model="name" required />
-      </div>
-      <div>
-        <label>비밀번호:</label>
-        <input type="password" v-model="password" required />
-      </div>
-      <div>
-        <label>비밀번호 확인:</label>
-        <input type="password" v-model="confirmPassword" required />
-      </div>
-      <button type="submit">회원가입</button>
-    </form>
-    <p v-if="message">{{ message }}</p>
+    </div>
   </div>
 </template>
 
@@ -51,7 +61,12 @@ export default {
           })
         });
         const data = await response.json();
-        this.message = data.message;
+        if (response.ok) {
+          this.message = '회원가입 성공';
+          this.$router.push('/');
+        } else {
+          this.message = data.message;
+        }
       } catch (error) {
         this.message = '회원가입 실패';
       }
@@ -59,3 +74,6 @@ export default {
   }
 };
 </script>
+
+<style scoped>
+</style>

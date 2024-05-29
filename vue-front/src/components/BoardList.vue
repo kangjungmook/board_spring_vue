@@ -1,6 +1,6 @@
 <template>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
   <div class="container">
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">       
     <div class="row justify-content-center">
       <div class="col-md-8">
         <div class="card my-4">
@@ -18,9 +18,9 @@
           </div>
         </div>
         <router-link to="/write" class="btn btn-primary w-100 mt-4">게시물 작성</router-link>
-        <router-link to="/login" clas  s="btn btn-primary w-100 mt-4" >로그인</router-link>
+        <button v-if="isLoggedIn" @click="handleLogout" class="btn btn-danger w-100 mt-4">로그아웃</button>
+        <router-link v-else to="/login" class="btn btn-success w-100 mt-4">로그인</router-link>
       </div>
-
     </div>
   </div>
 </template>
@@ -29,11 +29,13 @@
 export default {
   data() {
     return {
-      boards: []
+      boards: [],
+      isLoggedIn: false
     };
   },
   mounted() {
     this.fetchData();
+    this.checkLoginStatus();
   },
   methods: {
     fetchData() {
@@ -51,6 +53,13 @@ export default {
         .catch(error => {
           console.error(error);
         });
+    },
+    checkLoginStatus() {
+      this.isLoggedIn = !!localStorage.getItem('token');
+    },
+    handleLogout() {
+      localStorage.removeItem('token');
+      this.isLoggedIn = false;
     }
   }
 };

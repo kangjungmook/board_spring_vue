@@ -2,7 +2,10 @@ package com.codingrecipe.board.controller;
 
 import com.codingrecipe.board.entity.Board;
 import com.codingrecipe.board.service.BoardService;
+import com.codingrecipe.board.service.JwtService;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
@@ -10,17 +13,32 @@ import java.util.List;
 @RequestMapping("/api/board") //모든 핸들러 메서드가 /api/board 경로에 매핑됨
 public class BoardController {
 
-    private final BoardService boardService;  // BoardService 의존성 주입
+    private final BoardService boardService;
+    private final JwtService jwtService;
 
     @Autowired
-    public BoardController(BoardService boardService) {
+    public BoardController(BoardService boardService, JwtService jwtService) {
         this.boardService = boardService;
+        this.jwtService = jwtService;
     }
 
     @PostMapping("/write")
-    public void boardWritePro(@RequestBody Board board) {
-        boardService.write(board);
+    public void boardWritePro(@RequestBody Board board, @RequestHeader("Authorization") String authorizationHeader) {
+        // 헤더에서 토큰 추출
+        String token = authorizationHeader.substring("Bearer ".length()); // Bearer 키워드 제거
+
+        // 토큰을 이용하여 사용자 이메일 가져오기
+        String email = jwtService.getEmailFromToken(token);
+
+        // 새로운 게시글이므로 작성자 확인 없이 게시글 작성
+        if (email != null) {
+            boardService.write(board);
+        } else {
+            // 권한 없음 에러 처리
+            throw new IllegalArgumentException("로그인이 필요합니다.");
+        }
     }
+
 
     @GetMapping("/list")
     public List<Board> boardList(
