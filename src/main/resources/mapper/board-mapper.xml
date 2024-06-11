@@ -31,4 +31,5 @@
         INSERT INTO board (email, title, content, created_at) VALUES (#{email}, #{title}, #{content}, sysdate())
     </insert>
 
+
 </mapper>

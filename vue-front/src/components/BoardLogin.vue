@@ -50,9 +50,11 @@ export default {
         if (response.ok) {
           const data = await response.json();
           const token = data.token;
+          const userName = data.name; // name을 받아옴
           const userEmail = this.email; 
 
           localStorage.setItem('token', token);
+          localStorage.setItem('name', userName); 
           localStorage.setItem('email', userEmail);
 
           this.message = '로그인 성공';

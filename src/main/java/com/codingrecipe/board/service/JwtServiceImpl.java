@@ -13,13 +13,12 @@ public class JwtServiceImpl implements JwtService {
     private final long expirationMs = 3600000; // 토큰 만료 시간 (1시간)
 
     @Override
-    public String getToken(String email, String name) {
+    public String getToken(String email) {
         Date now = new Date();
         Date expiration = new Date(now.getTime() + expirationMs);
 
         JwtBuilder builder = Jwts.builder()
                 .setSubject(email)
-                .claim("name", name)
                 .setIssuedAt(now)
                 .setExpiration(expiration)
                 .signWith(secretKey);

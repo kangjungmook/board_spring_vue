@@ -14,4 +14,11 @@
     <select id="existsByEmail" parameterType="String" resultType="boolean">
         SELECT COUNT(*) > 0 FROM users WHERE email = #{email}
     </select>
+
+    <select id="getNameByEmail" parameterType="String" resultType="String">
+        SELECT name FROM users WHERE email = #{email}
+    </select>
+
+
+
 </mapper>

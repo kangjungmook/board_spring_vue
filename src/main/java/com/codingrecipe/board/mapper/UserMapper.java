@@ -2,6 +2,7 @@ package com.codingrecipe.board.mapper;
 
 
 import com.codingrecipe.board.Dto.SignUpDto;
+import org.apache.catalina.User;
 import org.apache.ibatis.annotations.Mapper;
 import com.codingrecipe.board.Dto.LoginDto;
 
@@ -12,6 +13,8 @@ public interface UserMapper {
     int signUp(SignUpDto signUpDto);
 
     boolean existsByEmail(String email);
+
+    String getNameByEmail(String email);
 
 }
 
