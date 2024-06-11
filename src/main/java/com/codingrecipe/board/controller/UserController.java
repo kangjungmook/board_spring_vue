@@ -1,5 +1,4 @@
 package com.codingrecipe.board.controller;
-
 import com.codingrecipe.board.Dto.LoginDto;
 import com.codingrecipe.board.Dto.ResponseDto;
 import com.codingrecipe.board.Dto.SignUpDto;
@@ -38,14 +37,12 @@ public class UserController {
     public ResponseEntity<?> login(@RequestBody LoginDto loginDto) {
         boolean success = userService.login(loginDto);
         if (success) {
-            String token = jwtService.getToken("Email", loginDto.getEmail(), loginDto.getName());
+            String token = jwtService.getToken(loginDto.getEmail(), loginDto.getName());
             Map<String, String> response = new HashMap<>();
             response.put("token", token);
             return ResponseEntity.ok(response);
         } else {
-
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("{\"error\": \"이메일 또는 비밀번호가 잘못되었습니다.\"}");
         }
     }
-
 }

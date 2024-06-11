@@ -1,14 +1,21 @@
 package com.codingrecipe.board.entity;
 
-import jakarta.persistence.Id;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
+import org.hibernate.annotations.CreationTimestamp;
+
+import java.time.LocalDateTime;
+import java.util.Date;
 
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class Board {
-
-    @Id
-    private Integer id;
+    private int id;
+    private String email;
     private String title;
     private String content;
-    private String userId;
+    private String created_at;
+    private String name;
 }

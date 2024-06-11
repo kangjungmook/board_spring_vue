@@ -9,28 +9,43 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+import com.codingrecipe.board.entity.Board;
+import com.codingrecipe.board.mapper.BoardMapper;
+import com.codingrecipe.board.mapper.UserMapper;
+import org.apache.ibatis.session.RowBounds;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+
 @Service
 public class BoardService {
 
     private final BoardMapper boardMapper;
+    private final UserMapper userMapper;
 
     @Autowired
-    public BoardService(BoardMapper boardMapper) {
+    public BoardService(BoardMapper boardMapper, UserMapper userMapper) {
         this.boardMapper = boardMapper;
+        this.userMapper = userMapper;
     }
 
     // 게시물 등록
-    public void write(Board board){
-        boardMapper.write(board);
+    public void write(Board board) throws Exception {
+        if (userMapper.existsByEmail(board.getEmail())) {
+            boardMapper.write(board);
+        } else {
+            throw new Exception("유효한 이메일이 필요합니다.");
+        }
     }
 
     // 게시물 삭제
-    public void boardDelete(int id){
+    public void boardDelete(int id) {
         boardMapper.delete(id);
     }
 
     // 게시물 수정
-    public void boardModify(Board board){
+    public void boardModify(Board board) {
         boardMapper.modify(board);
     }
 
@@ -50,5 +65,4 @@ public class BoardService {
     public Board boardView(Integer id) {
         return boardMapper.selectById(id);
     }
-
-    }
+}

@@ -12,8 +12,12 @@
     </update>
 
     <select id="selectAll" resultType="com.codingrecipe.board.entity.Board">
-        SELECT * FROM board
+        SELECT b.id, b.title, b.content, b.created_at, u.name
+        FROM board b
+                 JOIN users u ON b.email = u.email
+        ORDER BY b.id DESC
     </select>
+
 
     <select id="searchWith" parameterType="String" resultType="com.codingrecipe.board.entity.Board">
         SELECT * FROM board WHERE title LIKE CONCAT('%', #{keyword}, '%')
@@ -24,7 +28,7 @@
     </select>
 
     <insert id="write" parameterType="com.codingrecipe.board.entity.Board">
-        INSERT INTO board (title, content, user_id) VALUES (#{title}, #{content}, #{userId})
+        INSERT INTO board (email, title, content, created_at) VALUES (#{email}, #{title}, #{content}, sysdate())
     </insert>
 
 </mapper>

@@ -46,31 +46,32 @@ export default {
     };
   },
   methods: {
-    async handleSubmit() {
-      try {
-        const response = await fetch('/api/board/signup', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify({
-            email: this.email,
-            name: this.name,
-            password: this.password,
-            confirmPassword: this.confirmPassword
-          })
-        });
-        const data = await response.json();
-        if (response.ok) {
-          this.message = '회원가입 성공';
-          this.$router.push('/');
-        } else {
-          this.message = data.message;
-        }
-      } catch (error) {
-        this.message = '회원가입 실패';
-      }
+async handleSubmit() {
+  try {
+    const response = await fetch('/api/board/signup', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        email: this.email,
+        name: this.name,
+        password: this.password,
+        confirmPassword: this.confirmPassword
+      })
+    });
+    const data = await response.json();
+    if (response.ok) {
+      this.message = '회원가입 성공';
+      this.$router.push('/');
+    } else {
+      this.message = data.message;
     }
+  } catch (error) {
+    this.message = '회원가입 실패';
+  }
+}
+
   }
 };
 </script>

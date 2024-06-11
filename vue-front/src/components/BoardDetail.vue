@@ -1,6 +1,6 @@
 <template>
   <div class="container my-4">
-      <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
     <div class="card">
       <div class="card-header">
         <h2 class="card-title">{{ board.title }}</h2>
@@ -9,8 +9,8 @@
         <p class="card-text">{{ board.content }}</p>
       </div>
       <div class="card-footer">
-        <button @click="deleteBoard" class="btn btn-danger me-2">삭제</button>
-        <router-link :to="{ name: 'BoardModify', params: { id: board.id } }" class="btn btn-primary me-2">
+        <button v-if="isAuthor" @click="deleteBoard" class="btn btn-danger me-2">삭제</button>
+        <router-link v-if="isAuthor" :to="{ name: 'BoardModify', params: { id: board.id } }" class="btn btn-primary me-2">
           수정
         </router-link>
         <router-link to="/" class="btn btn-secondary">목록으로 돌아가기</router-link>
@@ -25,9 +25,16 @@ export default {
     return {
       board: {
         title: '',
-        content: ''
-      }
+        content: '',
+        email: '' 
+      },
+      currentUserEmail: localStorage.getItem('email') // 현재 로그인한 사용자의 이메일
     };
+  },
+  computed: {
+    isAuthor() {
+      return this.board.email === this.currentUserEmail; // 작성자와 현재 사용자의 이메일 비교
+    }
   },
   mounted() {
     this.fetchBoardDetail();

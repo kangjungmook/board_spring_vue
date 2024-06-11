@@ -10,6 +10,9 @@ public interface UserMapper {
     int login(LoginDto loginDto);
 
     int signUp(SignUpDto signUpDto);
+
+    boolean existsByEmail(String email);
+
 }
 
 

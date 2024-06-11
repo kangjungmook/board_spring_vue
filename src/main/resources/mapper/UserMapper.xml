@@ -10,4 +10,8 @@
     <insert id="signUp" parameterType="com.codingrecipe.board.Dto.SignUpDto">
         INSERT INTO users (email, name, password) VALUES (#{email}, #{name}, #{password})
     </insert>
+
+    <select id="existsByEmail" parameterType="String" resultType="boolean">
+        SELECT COUNT(*) > 0 FROM users WHERE email = #{email}
+    </select>
 </mapper>

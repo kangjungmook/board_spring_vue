@@ -1,8 +1,6 @@
 package com.codingrecipe.board.service;
 
 public interface JwtService {
-    public String getToken(String key, Object value, String name);
-
-    public String getEmailFromToken(String token);
+    String getToken(String email, String name);
+    String getEmailFromToken(String token);
 }
-

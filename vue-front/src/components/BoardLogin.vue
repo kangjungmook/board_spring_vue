@@ -1,7 +1,5 @@
 <template>
   <div class="container">
-      <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
-
     <div class="row justify-content-center mt-5">
       <div class="col-md-6">
         <div class="card">
@@ -20,8 +18,6 @@
             </form>
             <p v-if="message" class="mt-3 text-center">{{ message }}</p>
           </div>
-        <router-link to="/signup" class="btn btn-secondary">회원가입 </router-link>
-
         </div>
       </div>
     </div>
@@ -29,7 +25,7 @@
 </template>
 
 <script>
-export default {
+export default {  
   data() {
     return {
       email: '',
@@ -52,12 +48,15 @@ export default {
         });
 
         if (response.ok) {
-          this.message = '로그인 성공';
-          const token = await response.text(); 
+          const data = await response.json();
+          const token = data.token;
+          const userEmail = this.email; 
+
           localStorage.setItem('token', token);
-          // 로그인 성공 시 이벤트 발생
+          localStorage.setItem('email', userEmail);
+
+          this.message = '로그인 성공';
           this.$emit('loginSuccess', token);
-          // 페이지 이동
           this.$router.push('/');
         } else {
           this.message = '로그인 실패';
@@ -71,5 +70,5 @@ export default {
 </script>
 
 <style scoped>
-
+/* 스타일 정의 */
 </style>
