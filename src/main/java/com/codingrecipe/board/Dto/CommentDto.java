@@ -1,2 +1,4 @@
-package com.codingrecipe.board.Dto;public class CommentDto {
+package com.codingrecipe.board.Dto;
+
+public class CommentDto {
 }

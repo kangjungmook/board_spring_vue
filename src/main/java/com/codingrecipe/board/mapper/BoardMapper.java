@@ -25,6 +25,4 @@ public interface BoardMapper {
 
     // 모든 게시물을 조회하는 메서드 추가
     List<Board> selectAll();
-
-    List<Board> selectAllWithUserInfo();
 }

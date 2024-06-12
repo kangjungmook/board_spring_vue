@@ -31,29 +31,27 @@
         </div>
       </div>
     </nav>
-
-    <!-- Main Content -->
     <div class="container mt-5 pt-5">
       <div class="row justify-content-center">
-        <div class="col-md-10">
+        <div class="col-md-12">
           <div class="card">
             <div class="card-body">
-              <h2 class="card-title text-center">게시판 목록</h2>
+              <h2 class="card-title text-center">게시판</h2>
               <table class="table table-striped mt-4">
                 <thead>
                   <tr>
                     <th>번호</th>
-                    <th>이름</th>
                     <th>제목</th>
+                    <th>작성자</th>
                     <th>등록일자</th>
-                    <th>선택</th>
+                    <th>상세보기</th>
                   </tr>
                 </thead>
                 <tbody>
                   <tr v-for="(board, index) in boards" :key="board.id">
                     <td>{{ index + 1 }}</td>
-                    <td>{{ board.name }}</td>
                     <td>{{ board.title }}</td>
+                    <td>{{ board.name }}</td>
                     <td>{{ board.created_at }}</td>
                     <td>
                       <router-link :to="{ name: 'BoardDetail', params: { id: board.id } }" class="btn btn-primary btn-sm">상세보기</router-link>
@@ -86,7 +84,9 @@ export default {
     checkLoginStatus() {
       const token = localStorage.getItem('token');
       const name = localStorage.getItem('name');
-      this.isLoggedIn = !!token && !!name;
+      const email = localStorage.getItem('email');
+
+      this.isLoggedIn = !!token && !!name && !!email;
       if (this.isLoggedIn) {
         this.loggedInUser.name = name;
       }
@@ -94,6 +94,8 @@ export default {
     handleLogout() {
       localStorage.removeItem('token');
       localStorage.removeItem('name');
+      localStorage.removeItem('email');
+      
       this.isLoggedIn = false;
       this.loggedInUser = {};
     },
@@ -118,7 +120,6 @@ export default {
 </script>
 
 <style scoped>
-/* 추가적인 스타일링을 원하는대로 작성하세요 */
 body {
   background-color: #f8f9fa;
 }

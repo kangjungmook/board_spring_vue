@@ -31,28 +31,22 @@
         </div>
       </div>
     </nav>
-
-    <!-- Main Content -->
     <div class="container mt-5 pt-5">
       <div class="my-4 p-4 bg-white shadow-sm rounded">
         <table class="table table-bordered">
           <tbody>
             <tr>
-              <th class="col-2">등록일</th>
-              <td colspan="3">{{ board.created_at }}</td>
-            </tr>
-            <tr>
               <th class="col-2">제목</th>
               <td colspan="3">{{ board.title }}</td>
             </tr>
             <tr>
-              <th class="col-2">이름</th>
-              <td colspan="3">{{ board.name }}</td>
+              <th class="col-2">내용</th>
+              <td colspan="3" class="content-td">{{ board.content }}</td>
             </tr>
             <tr>
-              <th class="col-2">내용</th>
-              <td colspan="3">{{ board.content }}</td>
-            </tr>
+              <th class="col-2">등록일</th>
+              <td colspan="3">{{ board.created_at }}</td>
+            </tr> 
           </tbody>
         </table>
         <div class="text-center mt-4">
@@ -76,12 +70,12 @@ export default {
         created_at: '',
         name: '' 
       },
-      currentUserEmail: localStorage.getItem('email') // 현재 로그인한 사용자의 이메일
+      currentUserEmail: localStorage.getItem('email') 
     };
   },
   computed: {
     isAuthor() {
-      return this.board.email === this.currentUserEmail; // 작성자와 현재 사용자의 이메일 비교
+      return this.board.email === this.currentUserEmail;
     },
     isLoggedIn() {
       return !!this.currentUserEmail;
@@ -120,7 +114,7 @@ export default {
     handleLogout() {
       localStorage.removeItem('token');
       localStorage.removeItem('email');
-      localStorage.removeItem('name');
+      
       this.currentUserEmail = null;
       this.$router.push('/');
     }
@@ -131,5 +125,9 @@ export default {
 <style scoped>
 th, td {
   padding: 15px;
+}
+.content-td {
+  height: 200px; /* 원하는 높이로 조정 */
+  white-space: pre-wrap; /* 줄바꿈을 유지합니다. */
 }
 </style>

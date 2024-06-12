@@ -1,4 +1,5 @@
 package com.codingrecipe.board.controller;
+
 import com.codingrecipe.board.entity.Board;
 import com.codingrecipe.board.service.BoardService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -51,13 +52,18 @@ public class BoardController {
     }
 
     @DeleteMapping("/delete/{id}")
-    public void boardDelete(@PathVariable Integer id)  {
+    public void boardDelete(@PathVariable Integer id) {
         boardService.boardDelete(id);
     }
 
     @PutMapping("/modify/{id}")
-    public void boardModify(@PathVariable Integer id, @RequestBody Board board) {
-        board.setId(id);
-        boardService.boardModify(board);
+    public ResponseEntity<?> boardModify(@PathVariable Integer id, @RequestBody Board board) {
+        try {
+            board.setId(id);
+            boardService.boardModify(board);
+            return ResponseEntity.ok().build();
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("{\"error\": \"" + e.getMessage() + "\"}");
+        }
     }
 }
