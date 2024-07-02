@@ -2,21 +2,35 @@
   <div class="container">
     <div class="row justify-content-center mt-5">
       <div class="col-md-6">
-        <div class="card">
+        <div class="card shadow-lg">
           <div class="card-body">
-            <h2 class="card-title text-center">로그인</h2>
+            <h2 class="card-title text-center mb-4">로그인</h2>
             <form @submit.prevent="handleSubmit">
-              <div class="form-group">
-                <label for="email">이메일:</label>
-                <input type="email" class="form-control" id="email" v-model="email" required />
+              <div class="form-group mb-3">
+                <label for="email" class="form-label">이메일:</label>
+                <input 
+                  type="email" 
+                  class="form-control" 
+                  id="email" 
+                  v-model="email" 
+                  required
+                  placeholder="이메일을 입력하세요"
+                />
               </div>
-              <div class="form-group">
-                <label for="password">비밀번호:</label>
-                <input type="password" class="form-control" id="password" v-model="password" required />
+              <div class="form-group mb-4">
+                <label for="password" class="form-label">비밀번호:</label>
+                <input 
+                  type="password" 
+                  class="form-control" 
+                  id="password" 
+                  v-model="password" 
+                  required
+                  placeholder="비밀번호를 입력하세요"
+                />
               </div>
-              <button type="submit" class="btn btn-primary btn-block">로그인</button>
+              <button type="submit" class="btn btn-primary btn-block w-100">로그인</button>
             </form>
-            <p v-if="message" class="mt-3 text-center">{{ message }}</p>
+            <p v-if="message" class="mt-3 text-center text-danger">{{ message }}</p>
           </div>
         </div>
       </div>
@@ -25,7 +39,7 @@
 </template>
 
 <script>
-export default {  
+export default {
   data() {
     return {
       email: '',
@@ -50,7 +64,7 @@ export default {
         if (response.ok) {
           const data = await response.json();
           const token = data.token;
-          const userName = data.name; // name을 받아옴
+          const userName = data.name; 
           const userEmail = this.email; 
 
           localStorage.setItem('token', token);
@@ -72,5 +86,33 @@ export default {
 </script>
 
 <style scoped>
-/* 스타일 정의 */
+.container {
+  margin-top: 100px;
+}
+
+.card {
+  border-radius: 15px;
+  padding: 20px;
+  background-color: #ffffff;
+}
+
+.card-title {
+  font-weight: bold;
+}
+
+.btn {
+  border-radius: 30px;
+}
+
+input {
+  border-radius: 10px;
+  padding: 10px;
+  border: 1px solid #ced4da;
+}
+
+input:focus {
+  border-color: #80bdff;
+  outline: 0;
+  box-shadow: 0 0 5px rgba(0, 123, 255, 0.25);
+}
 </style>

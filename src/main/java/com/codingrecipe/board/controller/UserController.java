@@ -1,4 +1,4 @@
-package com.codingrecipe.board.controller;
+    package com.codingrecipe.board.controller;
 
 import com.codingrecipe.board.Dto.LoginDto;
 import com.codingrecipe.board.Dto.ResponseDto;
@@ -39,14 +39,13 @@ public class UserController {
         if (success) {
             String email = loginDto.getEmail();
             String token = jwtService.getToken(email);
-            String name = userService.getNameByEmail(email); // 사용자 이름 가져오기
+            String name = userService.getNameByEmail(email);
             Map<String, String> response = new HashMap<>();
             response.put("token", token);
-            response.put("name", name); // 이름을 응답에 추가
+            response.put("name", name);
             return ResponseEntity.ok(response);
         } else {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("{\"error\": \"이메일 또는 비밀번호가 잘못되었습니다.\"}");
         }
     }
-
 }

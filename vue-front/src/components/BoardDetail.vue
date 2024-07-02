@@ -46,13 +46,32 @@
             <tr>
               <th class="col-2">등록일</th>
               <td colspan="3">{{ board.created_at }}</td>
-            </tr> 
+            </tr>
           </tbody>
         </table>
         <div class="text-center mt-4">
           <router-link v-if="isAuthor" :to="{ name: 'BoardModify', params: { id: board.id } }" class="btn btn-primary me-2">수정</router-link>
           <button v-if="isAuthor" @click="deleteBoard" class="btn btn-danger me-2">삭제</button>
           <router-link to="/" class="btn btn-secondary">뒤로</router-link>
+        </div>
+
+        <!-- 댓글 -->
+        <div class="mt-5">
+          <h5>댓글</h5>
+          <ul class="list-group">
+            <li class="list-group-item" v-for="comment in comments" :key="comment.id">
+              <strong>{{ comment.email }}</strong> {{ comment.createdAt }}
+              <p>{{ comment.content }}</p>
+              <button v-if="isCommentAuthor(comment.email)" @click="deleteComment(comment.id)" class="btn btn-link text-danger btn-sm">삭제</button>
+            </li>
+          </ul>
+          <div v-if="isLoggedIn" class="mt-3">
+            <textarea v-model="newCommentContent" class="form-control mb-2" rows="3" placeholder="댓글을 입력하세요"></textarea>
+            <button @click="addComment" class="btn btn-primary">댓글 작성</button>
+          </div>
+          <div v-else>
+            <p>댓글을 작성하려면 <router-link to="/login">로그인</router-link>하세요.</p>
+          </div>
         </div>
       </div>
     </div>
@@ -70,7 +89,9 @@ export default {
         created_at: '',
         name: '' 
       },
-      currentUserEmail: localStorage.getItem('email') 
+      currentUserEmail: localStorage.getItem('email'),
+      comments: [],
+      newCommentContent: ''
     };
   },
   computed: {
@@ -88,6 +109,7 @@ export default {
   },
   mounted() {
     this.fetchBoardDetail();
+    this.fetchComments(); 
   },
   methods: {
     fetchBoardDetail() {
@@ -97,6 +119,56 @@ export default {
         .then(data => {
           this.board = data;
         });
+    },
+    fetchComments() {
+      const boardId = this.$route.params.id;
+      fetch(`/api/comments/board/${boardId}`)
+        .then(response => response.json())
+        .then(data => {
+          this.comments = data;
+        });
+    },
+    addComment() {
+      if (this.newCommentContent.trim() === '') {
+        alert('댓글 내용을 입력하세요.');
+        return;
+      }
+
+      const boardId = this.$route.params.id;
+      const comment = {
+        boardId,
+        email: this.currentUserEmail,
+        content: this.newCommentContent
+      };
+
+      fetch('/api/comments/add', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(comment)
+      })
+        .then(response => {
+          if (response.ok) {
+            this.fetchComments();
+            this.newCommentContent = '';
+          }
+        });
+    },
+    deleteComment(commentId) {
+      if (confirm("댓글을 삭제하시겠습니까?")) {
+        fetch(`/api/comments/delete/${commentId}`, {
+          method: 'DELETE'
+        })
+          .then(response => {
+            if (response.ok) {
+              this.fetchComments();
+            }
+          });
+      }
+    },
+    isCommentAuthor(email) {
+      return email === this.currentUserEmail;
     },
     deleteBoard() {
       if (confirm("게시물을 삭제하시겠습니까?")) {
@@ -127,7 +199,7 @@ th, td {
   padding: 15px;
 }
 .content-td {
-  height: 200px; /* 원하는 높이로 조정 */
-  white-space: pre-wrap; /* 줄바꿈을 유지합니다. */
+  height: 200px; 
+  white-space: pre-wrap;
 }
 </style>
