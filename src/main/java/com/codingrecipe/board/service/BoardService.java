@@ -53,10 +53,10 @@ public class BoardService {
         return boardMapper.selectAll();
     }
 
-    // 키워드로 게시물을 검색하여 페이지네이션하여 조회
+    // 키워드로 게시물을 검색하여 페이지네이션하여 조회   
     public List<Board> boardSearchList(String keyword, int offset, int limit) {
         RowBounds rowBounds = new RowBounds(offset, limit);
-        return boardMapper.searchWith(keyword, rowBounds);
+        return boardMapper.searchWith(keyword, rowBounds);  
     }
 
     // 게시물 상세 조회

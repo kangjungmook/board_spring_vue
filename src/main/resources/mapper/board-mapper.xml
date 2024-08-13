@@ -15,9 +15,8 @@
         SELECT b.id, b.title, b.content, b.created_at, u.name
         FROM board b
                  JOIN users u ON b.email = u.email
-        ORDER BY b.id DESC
+        ORDER BY b.id desc
     </select>
-
 
     <select id="searchWith" parameterType="String" resultType="com.codingrecipe.board.entity.Board">
         SELECT * FROM board WHERE title LIKE CONCAT('%', #{keyword}, '%')

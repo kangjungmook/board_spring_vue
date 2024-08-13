@@ -5,7 +5,6 @@
 </template>
 
 <script>
-// @ is an alias to /src
 import BoardList from '../components/BoardList.vue'
 
 export default {

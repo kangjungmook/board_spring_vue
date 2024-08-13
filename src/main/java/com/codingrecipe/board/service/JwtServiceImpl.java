@@ -10,7 +10,7 @@ import java.util.Date;
 @Service
 public class JwtServiceImpl implements JwtService {
     private final SecretKey secretKey = Keys.secretKeyFor(SignatureAlgorithm.HS256);
-    private final long expirationMs = 3600000; // 토큰 만료 시간 (1시간)
+    private final long expirationMs = 3600000; //1시간
 
     @Override
     public String getToken(String email) {
@@ -36,11 +36,7 @@ public class JwtServiceImpl implements JwtService {
 
             return claims.getBody().getSubject();
         } catch (ExpiredJwtException e) {
-            throw new IllegalArgumentException("만료된 JWT 토큰입니다", e);
-        } catch (JwtException e) {
-            throw new IllegalArgumentException("유효하지 않은 JWT 토큰입니다", e);
-        } catch (Exception e) {
-            throw new IllegalArgumentException("JWT 토큰 처리 중 오류가 발생했습니다", e);
+            throw new IllegalArgumentException(e);
         }
     }
 }

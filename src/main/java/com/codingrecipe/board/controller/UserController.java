@@ -45,7 +45,7 @@ public class UserController {
             response.put("name", name);
             return ResponseEntity.ok(response);
         } else {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("{\"error\": \"이메일 또는 비밀번호가 잘못되었습니다.\"}");
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("이메일 또는 비밀번호가 잘못되었습니다.");
         }
     }
 }
