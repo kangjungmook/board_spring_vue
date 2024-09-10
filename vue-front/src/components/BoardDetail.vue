@@ -81,7 +81,6 @@
           <router-link to="/" class="btn btn-secondary">뒤로</router-link>
         </div>
 
-        <!-- 댓글 -->
         <div class="mt-5">
           <h5>댓글</h5>
           <ul class="list-group">
@@ -114,7 +113,6 @@
     </div>
   </div>
 </template>
-
 <script>
 export default {
   data() {
@@ -125,19 +123,22 @@ export default {
         email: "",
         created_at: "",
         name: "",
-      },
-      currentUserEmail: localStorage.getItem("email"),
-      comments: [],
-      newCommentContent: "",
+      }, // 게시물 데이터
+      currentUserEmail: localStorage.getItem("email"), // 현재 로그인한 사용자 이메일
+      comments: [], // 댓글 목록
+      newCommentContent: "", // 새 댓글 내용
     };
   },
   computed: {
+    // 게시물 작성자 여부
     isAuthor() {
       return this.board.email === this.currentUserEmail;
     },
+    // 로그인 여부
     isLoggedIn() {
       return !!this.currentUserEmail;
     },
+    // 로그인된 사용자 이름
     loggedInUser() {
       return {
         name: localStorage.getItem("name"),
@@ -145,10 +146,11 @@ export default {
     },
   },
   mounted() {
-    this.fetchBoardDetail();
-    this.fetchComments();
+    this.fetchBoardDetail(); // 게시물 상세 정보 가져오기
+    this.fetchComments(); // 댓글 목록 가져오기
   },
   methods: {
+    // 게시물 상세 정보 가져오기
     fetchBoardDetail() {
       const boardId = this.$route.params.id;
       fetch(`/api/board/view/${boardId}`)
@@ -157,6 +159,7 @@ export default {
           this.board = data;
         });
     },
+    // 댓글 목록 가져오기
     fetchComments() {
       const boardId = this.$route.params.id;
       fetch(`/api/comments/board/${boardId}`)
@@ -165,6 +168,7 @@ export default {
           this.comments = data;
         });
     },
+    // 댓글 추가하기
     addComment() {
       if (this.newCommentContent.trim() === "") {
         alert("댓글 내용을 입력하세요.");
@@ -187,10 +191,11 @@ export default {
       }).then((response) => {
         if (response.ok) {
           this.fetchComments();
-          this.newCommentContent = "";
+          this.newCommentContent = ""; // 댓글 작성 후 입력 필드 초기화
         }
       });
     },
+    // 댓글 삭제하기
     deleteComment(commentId) {
       if (confirm("댓글을 삭제하시겠습니까?")) {
         fetch(`/api/comments/delete/${commentId}`, {
@@ -202,9 +207,11 @@ export default {
         });
       }
     },
+    // 댓글 작성자 여부 확인
     isCommentAuthor(email) {
       return email === this.currentUserEmail;
     },
+    // 게시물 삭제하기
     deleteBoard() {
       if (confirm("게시물을 삭제하시겠습니까?")) {
         const boardId = this.$route.params.id;
@@ -212,16 +219,17 @@ export default {
           method: "DELETE",
         }).then((response) => {
           if (response.ok) {
-            this.$router.push("/");
+            this.$router.push("/"); // 삭제 후 홈으로 이동
           }
         });
       }
     },
+    // 로그아웃 처리
     handleLogout() {
       localStorage.removeItem("token");
       localStorage.removeItem("email");
       this.currentUserEmail = null;
-      this.$router.push("/");
+      this.$router.push("/"); // 로그아웃 후 홈으로 이동
     },
   },
 };

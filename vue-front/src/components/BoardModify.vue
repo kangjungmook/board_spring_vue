@@ -45,46 +45,46 @@
 export default {
   data() {
     return {
-      boardId: null,
+      boardId: null, // 게시물 ID
       board: {
         title: "",
         content: "",
-      },
-      loggedInUserEmail: null,
+      }, // 게시물 데이터
+      loggedInUserEmail: null, // 현재 로그인한 사용자 이메일
     };
   },
   mounted() {
-    this.boardId = this.$route.params.id;
-    this.loggedInUserEmail = localStorage.getItem("email")?.trim();
+    this.boardId = this.$route.params.id; // URL 파라미터에서 게시물 ID 가져오기
+    this.loggedInUserEmail = localStorage.getItem("email")?.trim(); // 현재 로그인한 사용자 이메일 가져오기
 
     fetch(`/api/board/view/${this.boardId}`)
       .then((response) => response.json())
       .then((data) => {
-        const boardOwnerEmail = data.email?.trim();
+        const boardOwnerEmail = data.email?.trim(); // 게시물 작성자 이메일
         if (this.loggedInUserEmail !== boardOwnerEmail) {
           alert("해당 게시물을 수정할 수 있는 권한이 없습니다.");
-          this.$router.push("/");
+          this.$router.push("/"); // 권한이 없는 경우 홈으로 리다이렉트
         } else {
-          this.board = data;
+          this.board = data; // 게시물 데이터 설정
         }
       });
-  },  
+  },
   methods: {
     updateBoard() {
-      const boardId = this.$route.params.id;
+      const boardId = this.$route.params.id; // URL 파라미터에서 게시물 ID 가져오기
       fetch(`/api/board/modify/${boardId}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
-          "Logged-In-User-Email": this.loggedInUserEmail,
+          "Logged-In-User-Email": this.loggedInUserEmail, // 로그인한 사용자 이메일 헤더에 추가
         },
         body: JSON.stringify(this.board),
       }).then((response) => {
         if (response.ok) {
-          this.$router.push("/");
+          this.$router.push("/"); // 수정 성공 시 홈으로 이동
         } else {
           return response.json().then((data) => {
-            alert(data.error);
+            alert(data.error); // 오류 메시지 표시
           });
         }
       });

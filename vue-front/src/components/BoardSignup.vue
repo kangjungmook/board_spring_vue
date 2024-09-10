@@ -8,49 +8,51 @@
             <form @submit.prevent="handleSubmit">
               <div class="mb-3">
                 <label for="email" class="form-label">이메일:</label>
-                <input 
-                  type="email" 
-                  class="form-control" 
-                  id="email" 
-                  v-model="email" 
+                <input
+                  type="email"
+                  class="form-control"
+                  id="email"
+                  v-model="email"
                   required
                   placeholder="이메일을 입력하세요"
                 />
               </div>
               <div class="mb-3">
                 <label for="name" class="form-label">이름:</label>
-                <input 
-                  type="text" 
-                  class="form-control" 
-                  id="name" 
-                  v-model="name" 
+                <input
+                  type="text"
+                  class="form-control"
+                  id="name"
+                  v-model="name"
                   required
                   placeholder="이름을 입력하세요"
                 />
               </div>
               <div class="mb-3">
                 <label for="password" class="form-label">비밀번호:</label>
-                <input 
-                  type="password" 
-                  class="form-control" 
-                  id="password" 
-                  v-model="password" 
+                <input
+                  type="password"
+                  class="form-control"
+                  id="password"
+                  v-model="password"
                   required
                   placeholder="비밀번호를 입력하세요"
                 />
               </div>
               <div class="mb-4">
                 <label for="confirmPassword" class="form-label">비밀번호 확인:</label>
-                <input 
-                  type="password" 
-                  class="form-control" 
-                  id="confirmPassword" 
-                  v-model="confirmPassword" 
+                <input
+                  type="password"
+                  class="form-control"
+                  id="confirmPassword"
+                  v-model="confirmPassword"
                   required
                   placeholder="비밀번호를 다시 입력하세요"
                 />
               </div>
-              <button type="submit" class="btn btn-primary btn-block w-100">회원가입</button>
+              <button type="submit" class="btn btn-primary btn-block w-100">
+                회원가입
+              </button>
             </form>
             <p v-if="message" class="mt-3 text-center text-danger">{{ message }}</p>
           </div>
@@ -59,49 +61,49 @@
     </div>
   </div>
 </template>
-
 <script>
 export default {
   data() {
     return {
-      email: '',
-      name: '',
-      password: '',
-      confirmPassword: '',
-      message: ''
+      email: "", // 사용자 입력 이메일
+      name: "", // 사용자 입력 이름
+      password: "", // 사용자 입력 비밀번호
+      confirmPassword: "", // 비밀번호 확인
+      message: "", // 회원가입 성공/실패 메시지
     };
   },
   methods: {
     async handleSubmit() {
       if (this.password !== this.confirmPassword) {
-        this.message = '비밀번호가 일치하지 않습니다.';
+        this.message = "비밀번호가 일치하지 않습니다.";
         return;
       }
       try {
-        const response = await fetch('/api/board/signup', {
-          method: 'POST',
+        // 회원가입 API 호출
+        const response = await fetch("/api/board/signup", {
+          method: "POST",
           headers: {
-            'Content-Type': 'application/json'
+            "Content-Type": "application/json",
           },
           body: JSON.stringify({
             email: this.email,
             name: this.name,
             password: this.password,
-            confirmPassword: this.confirmPassword
-          })
+            confirmPassword: this.confirmPassword,
+          }),
         });
         const data = await response.json();
         if (response.ok) {
-          this.message = '회원가입 성공';
-          this.$router.push('/');
+          this.message = "회원가입 성공";
+          this.$router.push("/"); // 회원가입 성공 후 홈으로 이동
         } else {
-          this.message = data.message;
+          this.message = data.message; // 서버에서 반환된 메시지 표시
         }
       } catch (error) {
-        this.message = '회원가입 실패';
+        this.message = "회원가입 실패";
       }
-    }
-  }
+    },
+  },
 };
 </script>
 
@@ -126,7 +128,7 @@ export default {
 
 input {
   border-radius: 10px;
-  padding: 10px;  
+  padding: 10px;
   border: 1px solid #ced4da;
 }
 

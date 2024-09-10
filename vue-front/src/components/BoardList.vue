@@ -6,7 +6,7 @@
       integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65"
       crossorigin="anonymous"
     />
-    <nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top shadow-sm">
+    <nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top">
       <div class="container-fluid">
         <router-link to="/" class="navbar-brand">게시판</router-link>
         <button
@@ -53,10 +53,10 @@
     <div class="container mt-5 pt-5">
       <div class="row justify-content-center">
         <div class="col-md-12">
-          <div class="card shadow-lg">
+          <div class="card shadow-sm border-light">
             <div class="card-body">
               <h2 class="card-title text-center mb-4">게시판</h2>
-              <table class="table table-striped mt-4">
+              <table class="table table-hover">
                 <thead>
                   <tr>
                     <th>번호</th>
@@ -75,9 +75,10 @@
                     <td>
                       <router-link
                         :to="{ name: 'BoardDetail', params: { id: board.id } }"
-                        class="btn btn-primary btn-sm"
-                        >상세보기</router-link
+                        class="btn btn-info btn-sm"
                       >
+                        상세보기
+                      </router-link>
                     </td>
                   </tr>
                 </tbody>
@@ -94,20 +95,21 @@
 export default {
   data() {
     return {
-      isLoggedIn: false,
-      loggedInUser: {},
-      boards: [],
+      isLoggedIn: false, // 사용자 로그인 상태
+      loggedInUser: {}, // 로그인된 사용자 정보
+      boards: [], // 게시물 목록
     };
   },
   mounted() {
-    this.checkLoginStatus();
-    this.fetchData();
+    this.checkLoginStatus(); // 컴포넌트가 마운트되면 로그인 상태 확인
+    this.fetchData(); // 게시물 데이터 가져오기
   },
   methods: {
     checkLoginStatus() {
       const token = localStorage.getItem("token");
       const name = localStorage.getItem("name");
       const email = localStorage.getItem("email");
+      
 
       this.isLoggedIn = !!token && !!name && !!email;
       if (this.isLoggedIn) {
@@ -145,24 +147,33 @@ export default {
 
 <style scoped>
 body {
-  background-color: #f8f9fa;
+  background-color: #f0f2f5;
 }
 .navbar {
   background-color: #ffffff;
-  border-bottom: 1px solid #e0e0e0;
+  border-bottom: 1px solid #dee2e6;
 }
 .card {
-  border-radius: 15px;
+  border-radius: 10px;
   padding: 20px;
   background-color: #ffffff;
 }
 .card-title {
   font-weight: bold;
+  color: #343a40;
 }
 .table {
   border-radius: 10px;
 }
-.btn {
-  border-radius: 30px;
+.table-hover tbody tr:hover {
+  background-color: #f8f9fa;
+}
+.btn-info {
+  background-color: #17a2b8;
+  border-color: #17a2b8;
+}
+.btn-info:hover {
+  background-color: #138496;
+  border-color: #117a8b;
 }
 </style>
