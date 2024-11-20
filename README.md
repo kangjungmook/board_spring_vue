@@ -1,5 +1,5 @@
-## 프로젝트 목적
- Spring Boot 3와 Vue.js를 익히기 위해 게시판을 만들어보았습니다.. 
+## 프로젝트의 목적
+ Spring Boot 3와 Vue.js를 익히기 위해 게시판을 만들었습니다
 
 ## 기술
 * Java: JDK 21 <br>
