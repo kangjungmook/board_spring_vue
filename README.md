@@ -6,6 +6,7 @@
 * Spring Boot: 3.0 <br>
 * 프론트엔드: Vue.js <br>
 * IDE: IntelliJ IDEA, Visual Studio
+* 데이터베이스 : mySql
 
 ## 기능
 * 회원가입
