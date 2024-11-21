@@ -2,11 +2,11 @@
  Spring Boot 3와 Vue.js를 익히기 위해 게시판을 만들었습니다
 
 ## 기술
-* Java: JDK 21 <br>
-* Spring Boot: 3.0 <br>
-* 프론트엔드: Vue.js <br>
+* Java: JDK 21
+* Spring Boot: 3.0
+* Frontend: Vue.js
 * IDE: IntelliJ IDEA, Visual Studio
-* 데이터베이스 : mySql
+* Database: MySQL
 
 ## 기능
 * 회원가입
